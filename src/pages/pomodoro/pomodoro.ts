@@ -20,6 +20,22 @@ const skipBtn = document.getElementById("skipBtn")!;
 const statusElement = document.getElementById("status")!;
 //sonido
 
+//pedimos permiso al usuario para mostrar notificaciones
+window.addEventListener('load', () => {
+  if ("Notification" in window) {
+    Notification.requestPermission().then(permission => {
+      console.log("Permiso de notificaciones:", permission);
+    });
+  }
+});
+function notifyModeChange(mode: "work" | "break") {
+  if (Notification.permission === "granted") {
+    new Notification("RecordPomoTime", {
+      body: mode === "work" ? "Concentración: ¡manos a la obra!" : "Descanso: Tómate un respiro",
+      icon: "./assets/notification-icon.png" // opcional, si tienes un icono
+    });
+  }
+}
 
 
 // Al cargar la página
@@ -68,7 +84,7 @@ function switchMode() {
   }
   updateTimer();
   saveState();
-
+  notifyModeChange(mode);
   // Espera de 2 segundos antes de continuar el conteo
   setTimeout(() => {
     isWaiting = false;
