@@ -117,6 +117,16 @@ resetBtn.addEventListener('click', () => {
   secondsLeft = workTime;
   statusElement.textContent = "Concentración";
   updateTimer();
+  //updateLaps();
+  saveState();
+});
+const resetAllBtn = document.getElementById("resetAllBtn")!;
+resetAllBtn.addEventListener('click', () => {
+  laps = 0;
+  mode = "work";
+  secondsLeft = workTime;
+  statusElement.textContent = "Concentración";
+  updateTimer();
   updateLaps();
   saveState();
 });
@@ -130,3 +140,14 @@ function saveState() {
   const state = { secondsLeft, isRunning, laps, mode, status: statusElement.textContent };
   localStorage.setItem('pomodoroState', JSON.stringify(state));
 }
+// Botón hamburguesa
+window.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
+
+  if (menuToggle && sidebar) {
+    menuToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+    });
+  }
+});
