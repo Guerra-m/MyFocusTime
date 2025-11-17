@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/pomodoro", "destination": "/src/pages/pomodoro/pomodoro.html" },
+    { "source": "/settings", "destination": "/src/pages/settings/settings.html" }
+  ]
+}
