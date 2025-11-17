@@ -1,3 +1,10 @@
+import workEndUrl from '../../assets/workEnd.mp3';
+import breakEndUrl from '../../assets/breakEnd.mp3';
+
+const workEndSound = new Audio(workEndUrl);
+const breakEndSound = new Audio(breakEndUrl);
+workEndSound.volume = 0.3
+
 let workTime = 50 * 60;
 let breakTime = 10 * 60;
 let secondsLeft = workTime;
@@ -11,6 +18,9 @@ const lapsElement = document.getElementById("laps")!;
 const resetBtn = document.getElementById("resetBtn")!;
 const skipBtn = document.getElementById("skipBtn")!;
 const statusElement = document.getElementById("status")!;
+//sonido
+
+
 
 // Al cargar la página
 window.addEventListener('load', () => {
@@ -39,32 +49,43 @@ function updateLaps() {
   lapsElement.textContent = `Llevas ${laps} vueltas`;
 }
 
+let isWaiting = false;
+
 function switchMode() {
+  isWaiting = true; // activamos espera
   if (mode === "work") {
     laps++;
     updateLaps();
     mode = "break";
     secondsLeft = breakTime;
     statusElement.textContent = "Descanso";
+    breakEndSound.play();
   } else {
     mode = "work";
     secondsLeft = workTime;
     statusElement.textContent = "Concentración";
+    workEndSound.play();
   }
-  saveState();
   updateTimer();
+  saveState();
+
+  // Espera de 2 segundos antes de continuar el conteo
+  setTimeout(() => {
+    isWaiting = false;
+  }, 2000);
 }
 
-// Intervalo de 1s
+// Modifica el setInterval para respetar la espera
 setInterval(() => {
-  if (isRunning && secondsLeft > 0) {
+  if (!isWaiting && isRunning && secondsLeft > 0) {
     secondsLeft--;
     updateTimer();
     saveState();
-  } else if (isRunning && secondsLeft === 0) {
+  } else if (!isWaiting && isRunning && secondsLeft === 0) {
     switchMode();
   }
 }, 1000);
+
 
 // Botones
 pauseBtn.addEventListener('click', () => {
