@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pomodoro</title>
+  <link rel="stylesheet" href="./pomodoro.css">
+</head>
+<body>
+
+  <!-- Botón hamburger -->
+  <button id="menuToggle" class="hamburger">☰</button>
+
+  <aside id="sidebar" class="collapsed">
+    <nav>
+      <ul>
+        <li>Pomo</li>
+        <li>Mis horas esta semana</li>
+        <li>Mis horas este mes</li>
+        <li>Mis horas este año</li>
+        <li>Configuración</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <h1>RecordPomoTime</h1>
+
+    <div class="timer-container">
+      <div id="timer">50:00</div>
+      <div id="status">Concentración</div>
+      <button id="pauseBtn">Pausa</button>
+
+      <div id="laps">Llevas 0 vueltas</div>
+
+      <div class="controls">
+        <button id="resetBtn">Resetear contador</button>
+        <button id="skipBtn">Saltar</button>
+      </div>
+
+      <div class="spotify-container">
+        <iframe
+          style="border-radius:12px"
+          src="https://open.spotify.com/embed/playlist/37i9dQZF1DXbtuVQL4zoey"
+          width="100%"
+          height="152"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    - Guerra - Todos los derechos reservados -
+  </footer>
+
+  <script type="module" src="./pomodoro.ts"></script>
+
+
+
+
+</body>
+</html>

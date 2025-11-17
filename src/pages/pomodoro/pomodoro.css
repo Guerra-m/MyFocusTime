@@ -1,0 +1,170 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* BODY */
+body {
+  background: #121212;      /* Fondo oscuro */
+  color: white;
+  margin: 0;
+}
+
+/* HAMBURGER BUTTON */
+.hamburger {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 28px;
+  background: rgba(0,0,0,0.4);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  z-index: 2000;
+  color: white;
+}
+
+/* SIDEBAR */
+aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: #1d1f27;
+  color: white;
+  padding: 70px 15px 10px;
+  transition: transform 0.3s ease;
+  z-index: 1500;
+}
+
+/* Oculto */
+aside.collapsed {
+  transform: translateX(-100%);
+}
+
+/* Sidebar items */
+aside ul {
+  list-style: none;
+}
+
+aside li {
+  margin: 18px 0;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+aside li:hover {
+  opacity: 1;
+  font-weight: bold;
+}
+
+/* MAIN */
+main {
+  padding: 40px;
+  transition: margin-left 0.3s ease;
+}
+
+/* Cuando el menú está abierto: desplazar main */
+aside:not(.collapsed) ~ main {
+  margin-left: 220px;
+}
+
+/* Cuando está cerrado: normal */
+aside.collapsed ~ main {
+  margin-left: 0;
+}
+
+/* Título */
+main h1 {
+  font-size: 32px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* TIMER */
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+#timer {
+  font-size: 80px;
+  font-weight: bold;
+}
+
+#status {
+  font-size: 24px;
+  color: #bbbbbb;
+}
+
+/* Botón Pausa */
+#pauseBtn {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  background: #1d1f27;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#pauseBtn:hover {
+  background: #323545;
+}
+
+/* VUELTAS */
+#laps {
+  font-size: 22px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Controles */
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.controls button {
+  padding: 8px 15px;
+  border: none;
+  background: #1d1f27;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.controls button:hover {
+  background: #323545;
+}
+
+/* SPOTIFY */
+.spotify-container {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #1d1f27;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #ccc;
+  border-top: 1px solid #333;
+}
