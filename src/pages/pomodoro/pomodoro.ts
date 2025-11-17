@@ -4,6 +4,7 @@ import breakEndUrl from '../../assets/breakEnd.mp3';
 const workEndSound = new Audio(workEndUrl);
 const breakEndSound = new Audio(breakEndUrl);
 workEndSound.volume = 0.3
+breakEndSound.volume=1;
 
 let workTime = 50 * 60;
 let breakTime = 10 * 60;
