@@ -1,8 +1,7 @@
 let workTime = 50 * 60;
 let breakTime = 10 * 60;
-
-let time = workTime;
-let isPaused = false;
+let secondsLeft = workTime;
+let isRunning = true;
 let mode: "work" | "break" = "work";
 let laps = 0;
 
@@ -13,27 +12,27 @@ const resetBtn = document.getElementById("resetBtn")!;
 const skipBtn = document.getElementById("skipBtn")!;
 const statusElement = document.getElementById("status")!;
 
-const menuToggle = document.getElementById("menuToggle");
-const sidebar = document.getElementById("sidebar");
+// Al cargar la página
+window.addEventListener('load', () => {
+  const savedState = localStorage.getItem('pomodoroState');
+  if (savedState) {
+    const state = JSON.parse(savedState);
+    secondsLeft = state.secondsLeft;
+    isRunning = state.isRunning;
+    laps = state.laps;
+    mode = state.mode;
+    statusElement.textContent = state.status;
+  }
+  updateTimer();
+  updateLaps();
+});
 
-if (menuToggle && sidebar) {
-  menuToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
-  });
-}
-
+// Funciones de timer
 function updateTimer() {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-
-  const formattedTime =
-    `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-
-  timerElement.textContent = formattedTime;
-
-  document.title = `${formattedTime} - ${
-    mode === "work" ? "Concentración" : "Descanso"
-  }`;
+  const minutes = Math.floor(secondsLeft / 60);
+  const seconds = secondsLeft % 60;
+  timerElement.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+  document.title = `${timerElement.textContent} - ${mode === "work" ? "Concentración" : "Descanso"}`;
 }
 
 function updateLaps() {
@@ -45,40 +44,51 @@ function switchMode() {
     laps++;
     updateLaps();
     mode = "break";
-    time = breakTime;
+    secondsLeft = breakTime;
     statusElement.textContent = "Descanso";
   } else {
     mode = "work";
-    time = workTime;
+    secondsLeft = workTime;
     statusElement.textContent = "Concentración";
   }
-
+  saveState();
   updateTimer();
 }
 
+// Intervalo de 1s
 setInterval(() => {
-  if (!isPaused && time > 0) {
-    time--;
+  if (isRunning && secondsLeft > 0) {
+    secondsLeft--;
     updateTimer();
-  } else if (!isPaused && time === 0) {
+    saveState();
+  } else if (isRunning && secondsLeft === 0) {
     switchMode();
   }
 }, 1000);
 
-pauseBtn.addEventListener("click", () => {
-  isPaused = !isPaused;
-  pauseBtn.textContent = isPaused ? "Reanudar" : "Pausa";
+// Botones
+pauseBtn.addEventListener('click', () => {
+  isRunning = !isRunning;
+  pauseBtn.textContent = isRunning ? "Pausa" : "Reanudar";
+  saveState();
 });
 
-resetBtn.addEventListener("click", () => {
+resetBtn.addEventListener('click', () => {
   laps = 0;
-  updateLaps();
-
   mode = "work";
-  time = workTime;
+  secondsLeft = workTime;
+  statusElement.textContent = "Concentración";
   updateTimer();
+  updateLaps();
+  saveState();
 });
 
-skipBtn.addEventListener("click", () => {
+skipBtn.addEventListener('click', () => {
   switchMode();
 });
+
+// Guardar en localStorage
+function saveState() {
+  const state = { secondsLeft, isRunning, laps, mode, status: statusElement.textContent };
+  localStorage.setItem('pomodoroState', JSON.stringify(state));
+}
