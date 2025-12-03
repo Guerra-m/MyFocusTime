@@ -171,6 +171,32 @@ main h1 {
   font-size: 16px;
   cursor: pointer;
 }
+/* Hoy llevas estudiando x horas */
+.tiempoEstudio {
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+}
+
+.tiempoEstudio::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background: #00e676;
+  transition: width 0.3s ease;
+}
+
+.tiempoEstudio:hover::after {
+  width: 100%;
+}
 
 /* SPOTIFY */
 .spotify-container {

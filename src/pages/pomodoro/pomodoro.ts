@@ -21,14 +21,32 @@ const skipBtn = document.getElementById("skipBtn")!;
 const statusElement = document.getElementById("status")!;
 //sonido
 
-//pedimos permiso al usuario para mostrar notificaciones
-window.addEventListener('load', () => {
+// Al cargar la página (unificado)
+window.addEventListener('DOMContentLoaded', () => {
+
+  // pedir permiso para notificaciones
   if ("Notification" in window) {
     Notification.requestPermission().then(permission => {
       console.log("Permiso de notificaciones:", permission);
     });
   }
+
+  // cargar el estado guardado
+  const savedState = localStorage.getItem('pomodoroState');
+  if (savedState) {
+    const state = JSON.parse(savedState);
+    secondsLeft = state.secondsLeft;
+    isRunning = state.isRunning;
+    laps = state.laps;
+    mode = state.mode;
+    statusElement.textContent = state.status;
+  }
+
+  updateTimer();
+  updateLaps();
+  updateHorasHoy();
 });
+
 function notifyModeChange(mode: "work" | "break") {
   if (Notification.permission === "granted") {
     new Notification("RecordPomoTime", {
@@ -39,20 +57,7 @@ function notifyModeChange(mode: "work" | "break") {
 }
 
 
-// Al cargar la página
-window.addEventListener('load', () => {
-  const savedState = localStorage.getItem('pomodoroState');
-  if (savedState) {
-    const state = JSON.parse(savedState);
-    secondsLeft = state.secondsLeft;
-    isRunning = state.isRunning;
-    laps = state.laps;
-    mode = state.mode;
-    statusElement.textContent = state.status;
-  }
-  updateTimer();
-  updateLaps();
-});
+
 
 // Funciones de timer
 function updateTimer() {
@@ -64,6 +69,7 @@ function updateTimer() {
 
 function updateLaps() {
   lapsElement.textContent = `Llevas ${laps} vueltas`;
+  updateHorasHoy(); //Actualiza las horas que llevo estudiando
 }
 
 let isWaiting = false;
@@ -151,3 +157,8 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+function updateHorasHoy() {
+  const horasHoy = (laps * (workTime / 60)) / 60; // workTime = 50*60
+  const horasElement = document.getElementById("horasHoy")!;
+  horasElement.textContent = `Hoy llevas estudiando ${horasHoy.toFixed(2)} horas.`;
+}
