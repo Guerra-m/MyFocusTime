@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horas esta semana</title>
   <link rel="stylesheet" href="../pomodoro/pomodoro.css">
-  <title>Settings</title>
 </head>
 <body>
+<!-- Botón hamburger -->
   <button id="menuToggle" class="hamburger">☰</button>
   <aside id="sidebar">
     <nav>
       <ul>
         <li><a href="../pomodoro/pomodoro.html">Pomo</a></li>
-        <li><a href="./semana.html">Mis horas esta semana</a></li>
+        <li>Mis horas esta semana</li>
         <li><a href="./mes.html">Mis horas este mes</a></li>
         <li><a href="./anio.html">Mis horas este año</a></li>
         <li><a href="../settings/settings.html">Configuración</a></li>
       </ul>
     </nav>
   </aside>
+
   <main>
-    <h1>Proximamente...</h1>
+    <h1>Horas esta semana</h1>
+    <p id="horasSemana"></p>
   </main>
-  <script type="module" src="../stats/stats.ts"></script>
+
+ <script type="module" src="./stats.ts"></script>
+
 </body>
 </html>

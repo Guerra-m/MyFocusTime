@@ -1,0 +1,81 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* BODY */
+body {
+  background: #121212;      /* Fondo oscuro */
+  color: white;
+  margin: 0;
+}
+
+/* HAMBURGER BUTTON */
+.hamburger {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 28px;
+  background: rgba(0,0,0,0.4);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  z-index: 2000;
+  color: white;
+}
+
+/* SIDEBAR */
+aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: #1d1f27;
+  color: white;
+  padding: 70px 15px 10px;
+  transition: transform 0.3s ease;
+  z-index: 1500;
+}
+
+/* Oculto */
+aside.collapsed {
+  transform: translateX(-100%);
+}
+
+/* Sidebar items */
+aside ul {
+  list-style: none;
+}
+
+aside li {
+  margin: 18px 0;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+aside li:hover {
+  opacity: 1;
+  font-weight: bold;
+}
+
+/* MAIN */
+main {
+  padding: 40px;
+  transition: margin-left 0.3s ease;
+}
+
+/* Cuando el menú está abierto: desplazar main */
+aside:not(.collapsed) ~ main {
+  margin-left: 220px;
+}
+
+/* Cuando está cerrado: normal */
+aside.collapsed ~ main {
+  margin-left: 0;
+}
