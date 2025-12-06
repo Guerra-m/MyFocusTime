@@ -11,7 +11,6 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // ------------------ OBTENER USUARIO LOGUEADO ------------------
-
 const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
 
 // si no hay usuario → ir al login
@@ -19,10 +18,7 @@ if (!usuario || !usuario.id) {
   window.location.href = "../../pages/login/login.html";
 }
 
-const usuarioId = usuario.id;
-
 // --------------------------------------------------------------
-
 function getHoyISO() {
   const hoy = new Date();
   const y = hoy.getFullYear();
@@ -36,10 +32,11 @@ const API_URL = "http://localhost:8080/tiempo";
 const hoy = getHoyISO();
 
 // ------------------- HORAS SEMANA ----------------------
-
 async function fetchHorasSemana(): Promise<number> {
   try {
-    const response = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${hoy}`);
+    const response = await fetch(`${API_URL}/semanal?fecha=${hoy}`, {
+      credentials: "include"
+    });
     if (!response.ok) throw new Error("Error en la API");
 
     const data = await response.json();
@@ -63,9 +60,15 @@ function toISOlocal(date: Date) {
 }
 
 // ------------------- CALENDARIO SEMANA --------------------
-
 async function renderSemana() {
-  const response = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${hoy}`);
+  const response = await fetch(`${API_URL}/semanal?fecha=${hoy}`, {
+    credentials: "include"
+  });
+  if (!response.ok) {
+    console.error("Error al cargar registros de la semana");
+    return;
+  }
+
   const registros = await response.json();
 
   const hoyDate = new Date(hoy);
@@ -106,7 +109,6 @@ async function renderSemana() {
 }
 
 // ----------------------- INICIO --------------------------
-
 if (window.location.pathname.endsWith("semana.html")) {
   fetchHorasSemana().then(h =>
     (document.getElementById("horasSemana")!.innerText =
@@ -115,19 +117,12 @@ if (window.location.pathname.endsWith("semana.html")) {
 
   renderSemana();
 }
+
 // ----------------------- LOGOUT --------------------------
-
 const logoutBtn = document.getElementById("logoutBtn");
-
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
-    // borrar usuario guardado
     localStorage.removeItem("usuario");
-
-    // opcional: limpiar todo localStorage
-    // localStorage.clear();
-
-    // redirigir al login
     window.location.href = "../../pages/login/login.html";
   });
 }

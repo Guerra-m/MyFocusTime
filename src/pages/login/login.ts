@@ -14,7 +14,8 @@ form.addEventListener("submit", async (e) => {
     const url = `${API_URL}?mail=${encodeURIComponent(mail)}&password=${encodeURIComponent(password)}`;
 
     const response = await fetch(url, {
-      method: "POST" // <<-- ESTE ES EL CAMBIO IMPORTANTE
+      method: "POST", 
+      credentials: "include"
     });
 
     if (!response.ok) {

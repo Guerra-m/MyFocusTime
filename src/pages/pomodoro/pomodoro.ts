@@ -1,9 +1,6 @@
 import workEndUrl from '../../assets/workEnd.mp3';
 import breakEndUrl from '../../assets/breakEnd.mp3';
 const API_URL = "http://localhost:8080/tiempo";
-// Obtener usuario logueado
-const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
-const usuarioId = usuario ? usuario.id : 1; // fallback a 1 si no hay usuario
 
 const workEndSound = new Audio(workEndUrl);
 const breakEndSound = new Audio(breakEndUrl);
@@ -184,14 +181,16 @@ function getHoyISO() {
 // Buscar si ya existe registro de hoy
 async function obtenerRegistroHoy() {
   const fecha = getHoyISO();
-  const resp = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${fecha}`);
+  const resp = await fetch(`${API_URL}/semanal?fecha=${fecha}`, {
+    credentials: "include" // <-- importante
+  });
   if (!resp.ok) return null;
 
   const data = await resp.json();
   return data.find((r: any) => r.fecha === fecha) || null;
 }
 
-// Crear o actualizar registro
+//Crear o actualizar registro
 async function guardarEstudio() {
   const fecha = getHoyISO();
   const minutos = laps * 50; // cada lap = 50 minutos de trabajo
@@ -203,8 +202,8 @@ async function guardarEstudio() {
     const resp = await fetch(`${API_URL}/crear`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include", // <-- importante
       body: JSON.stringify({
-        usuarioId,
         fecha,
         minutosEstudiados: minutos
       })
@@ -221,8 +220,8 @@ async function guardarEstudio() {
     const resp = await fetch(`${API_URL}/actualizar/${hoyRegistro.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
+      credentials: "include", // <-- importante
       body: JSON.stringify({
-        usuarioId,
         fecha,
         minutosEstudiados: minutos
       })
