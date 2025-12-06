@@ -37,7 +37,7 @@ aside {
   height: 100vh;
   background: #1d1f27;
   color: white;
-  padding: 70px 15px 10px;
+  padding: 70px 0px 10px;
   transition: transform 0.3s ease;
   z-index: 1500;
 }
@@ -48,17 +48,32 @@ aside.collapsed {
 }
 
 /* Sidebar items */
+aside nav{
+  width: 100%;
+}
 aside ul {
   list-style: none;
 }
-
+aside ul li{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.486);
+  border-top: 1px solid rgba(0, 0, 0, 0.486);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+}
+aside ul li a{
+  text-decoration: none;
+  color: gray;
+}
 aside li {
-  margin: 18px 0;
+
   cursor: pointer;
   font-size: 18px;
   opacity: 0.8;
 }
-
+aside .actual{
+background-color: #022a3f;
+}
 aside li:hover {
   opacity: 1;
   font-weight: bold;
@@ -183,20 +198,49 @@ main h1 {
   display: inline-block;
 }
 
-.tiempoEstudio::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -5px;
-  width: 0%;
-  height: 2px;
-  background: #00e676;
-  transition: width 0.3s ease;
+
+/* BOTÓN GUARDAR */
+#guardarBtn {
+  margin-top: 0;             /* 🔹 lo subimos */
+  padding: 4px 10px;         
+  font-size: 14px;           
+  font-weight: bold;
+  background: linear-gradient(135deg, #1984db, #0b528b);
+  border: none;
+  color: #fffdfd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100px;
+  height: 28px;              /* 🔹 más alto para quedar centrado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 8px rgba(65, 134, 212, 0.4);
 }
 
-.tiempoEstudio:hover::after {
-  width: 100%;
+/* Hover más prolijo */
+#guardarBtn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 12px rgba(13, 56, 105, 0.75);
 }
+
+/* Click */
+#guardarBtn:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 6px rgba(7, 45, 94, 0.4);
+}
+
+/* Contenedor del texto + botón */
+.tiempoEstudio {
+  display: flex;
+  align-items: center;   /* 🔹 Centrado vertical perfecto */
+  gap: 12px;
+}
+
+
 
 /* SPOTIFY */
 .spotify-container {

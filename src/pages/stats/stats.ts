@@ -9,11 +9,19 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+function getHoyISO() {
+  const hoy = new Date();
+  const y = hoy.getFullYear();
+  const m = String(hoy.getMonth() + 1).padStart(2, "0");
+  const d = String(hoy.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
 
 // API
 const API_URL = "http://localhost:8080/tiempo";
 const usuarioId = 1;
-const hoy = new Date().toISOString().split("T")[0];
+const hoy = getHoyISO();
+
 // ------------------- HORAS SEMANA ----------------------
 
 async function fetchHorasSemana(): Promise<number> {
@@ -32,6 +40,12 @@ async function fetchHorasSemana(): Promise<number> {
     console.error(err);
     return 0;
   }
+}
+function toISOlocal(date: Date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 // ------------------- CALENDARIO SEMANA --------------------
@@ -64,7 +78,7 @@ async function renderSemana() {
     const dia = new Date(lunes);
     dia.setDate(lunes.getDate() + i);
 
-    const fechaISO = dia.toISOString().split("T")[0];
+    const fechaISO = toISOlocal(dia);
     const registro = registros.find((r: any) => r.fecha === fechaISO);
     const minutos = registro ? registro.minutosEstudiados : 0;
     const horas = (minutos / 60).toFixed(1);

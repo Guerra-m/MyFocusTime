@@ -162,3 +162,76 @@ function updateHorasHoy() {
   const horasElement = document.getElementById("horasHoy")!;
   horasElement.textContent = `Hoy llevas estudiando ${horasHoy.toFixed(2)} horas.`;
 }
+// ===========================
+//     📌 GUARDAR EN BD
+// ===========================
+
+// Config
+const API_URL = "http://localhost:8080/tiempo";
+const usuarioId = 1;
+
+// Obtener fecha YYYY-MM-DD
+function getHoyISO() {
+  const hoy = new Date();
+  const y = hoy.getFullYear();
+  const m = String(hoy.getMonth() + 1).padStart(2, "0");
+  const d = String(hoy.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+// Buscar si ya existe registro de hoy
+async function obtenerRegistroHoy() {
+  const fecha = getHoyISO();
+  const resp = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${fecha}`);
+  if (!resp.ok) return null;
+
+  const data = await resp.json();
+  return data.find((r: any) => r.fecha === fecha) || null;
+}
+
+// Crear o actualizar registro
+async function guardarEstudio() {
+  const fecha = getHoyISO();
+  const minutos = laps * 50; // cada lap = 50 minutos de trabajo
+
+  const hoyRegistro = await obtenerRegistroHoy();
+
+  if (!hoyRegistro) {
+    // ---- Crear nuevo registro ----
+    const resp = await fetch(`${API_URL}/crear`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usuarioId,
+        fecha,
+        minutosEstudiados: minutos
+      })
+    });
+
+    if (resp.ok) {
+      alert("Tiempo guardado exitosamente ✔");
+    } else {
+      alert("Error al guardar ❌");
+    }
+
+  } else {
+    // ---- Actualizar registro existente ----
+    const resp = await fetch(`${API_URL}/actualizar/${hoyRegistro.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usuarioId,
+        fecha,
+        minutosEstudiados: minutos
+      })
+    });
+
+    if (resp.ok) {
+      alert("Tiempo actualizado ✔");
+    } else {
+      alert("Error al actualizar ❌");
+    }
+  }
+}
+
+// Vincular botón
+document.getElementById("guardarBtn")!.addEventListener("click", guardarEstudio);
