@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Horas esta semana</title>
   <link rel="stylesheet" href="../pomodoro/pomodoro.css">
+  <link rel="stylesheet" href="../stats/semana.css"> 
 </head>
+
 <body>
-<!-- Botón hamburger -->
+  <!-- Botón hamburger -->
   <button id="menuToggle" class="hamburger">☰</button>
   <aside id="sidebar">
     <nav>
@@ -22,10 +25,14 @@
 
   <main>
     <h1>Horas esta semana</h1>
-    <p id="horasSemana"></p>
+
+    <div id="calendarWeek" class="calendar-week">
+      <!-- Aquí inyectaremos los días -->
+    </div>
   </main>
 
- <script type="module" src="./stats.ts"></script>
+  <script type="module" src="./stats.ts"></script>
 
 </body>
+
 </html>
