@@ -9,6 +9,20 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// ------------------ OBTENER USUARIO LOGUEADO ------------------
+
+const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+
+// si no hay usuario → ir al login
+if (!usuario || !usuario.id) {
+  window.location.href = "../../pages/login/login.html";
+}
+
+const usuarioId = usuario.id;
+
+// --------------------------------------------------------------
+
 function getHoyISO() {
   const hoy = new Date();
   const y = hoy.getFullYear();
@@ -19,7 +33,6 @@ function getHoyISO() {
 
 // API
 const API_URL = "http://localhost:8080/tiempo";
-const usuarioId = 1;
 const hoy = getHoyISO();
 
 // ------------------- HORAS SEMANA ----------------------
@@ -41,6 +54,7 @@ async function fetchHorasSemana(): Promise<number> {
     return 0;
   }
 }
+
 function toISOlocal(date: Date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -54,14 +68,12 @@ async function renderSemana() {
   const response = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${hoy}`);
   const registros = await response.json();
 
-  // obtener lunes
   const hoyDate = new Date(hoy);
   const diaSemana = hoyDate.getDay();
   const offset = diaSemana === 0 ? -6 : 1 - diaSemana;
   const lunes = new Date(hoyDate);
   lunes.setDate(hoyDate.getDate() + offset);
 
-  // ---------------- TITULO GRANDE (Mes y año) ----------------
   const opcionesMes = { month: "long" } as const;
   const mesNombre = lunes.toLocaleDateString("es-ES", opcionesMes);
   const year = lunes.getFullYear();
@@ -69,11 +81,9 @@ async function renderSemana() {
   document.getElementById("tituloSemana")!.innerText =
     `${mesNombre.toUpperCase()} ${year}`;
 
-  // contenedor
   const contenedor = document.getElementById("calendarWeek")!;
   contenedor.innerHTML = "";
 
-  // crear días
   for (let i = 0; i < 7; i++) {
     const dia = new Date(lunes);
     dia.setDate(lunes.getDate() + i);
@@ -104,4 +114,20 @@ if (window.location.pathname.endsWith("semana.html")) {
   );
 
   renderSemana();
+}
+// ----------------------- LOGOUT --------------------------
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    // borrar usuario guardado
+    localStorage.removeItem("usuario");
+
+    // opcional: limpiar todo localStorage
+    // localStorage.clear();
+
+    // redirigir al login
+    window.location.href = "../../pages/login/login.html";
+  });
 }

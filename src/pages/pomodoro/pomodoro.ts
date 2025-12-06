@@ -1,5 +1,9 @@
 import workEndUrl from '../../assets/workEnd.mp3';
 import breakEndUrl from '../../assets/breakEnd.mp3';
+const API_URL = "http://localhost:8080/tiempo";
+// Obtener usuario logueado
+const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+const usuarioId = usuario ? usuario.id : 1; // fallback a 1 si no hay usuario
 
 const workEndSound = new Audio(workEndUrl);
 const breakEndSound = new Audio(breakEndUrl);
@@ -167,8 +171,7 @@ function updateHorasHoy() {
 // ===========================
 
 // Config
-const API_URL = "http://localhost:8080/tiempo";
-const usuarioId = 1;
+
 
 // Obtener fecha YYYY-MM-DD
 function getHoyISO() {
@@ -235,3 +238,19 @@ async function guardarEstudio() {
 
 // Vincular botón
 document.getElementById("guardarBtn")!.addEventListener("click", guardarEstudio);
+// ----------------------- LOGOUT --------------------------
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    // borrar usuario guardado
+    localStorage.removeItem("usuario");
+
+    // opcional: limpiar todo localStorage
+    // localStorage.clear();
+
+    // redirigir al login
+    window.location.href = "../../pages/login/login.html";
+  });
+}

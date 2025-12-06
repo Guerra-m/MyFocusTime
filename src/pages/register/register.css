@@ -1,0 +1,80 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Caja principal */
+.register-container {
+  background: white;
+  width: 340px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.register-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* Inputs */
+.input-group {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #888;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* Botón */
+.btn-register {
+  width: 100%;
+  padding: 12px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.btn-register:hover {
+  background: #1e8c4c;
+}
+
+/* Texto inferior */
+.login-text {
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.login-text a {
+  text-decoration: none;
+  color: #27ae60;
+}
