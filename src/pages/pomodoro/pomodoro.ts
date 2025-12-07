@@ -1,15 +1,20 @@
-import workEndUrl from '../../assets/workEnd.mp3';
-import breakEndUrl from '../../assets/breakEnd.mp3';
-const API_URL = `${import.meta.env.VITE_API_URL}/tiempo`;
-// Obtener usuario logueado
-const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
-const usuarioId = usuario ? usuario.id : 1; // fallback a 1 si no hay usuario
+import api from "../../api/api";
+import workEndUrl from "../../assets/workEnd.mp3";
+import breakEndUrl from "../../assets/breakEnd.mp3";
 
+// ---------- VALIDAR LOGIN ----------
+const token = localStorage.getItem("authToken");
+if (!token) {
+  window.location.href = "../../pages/login/login.html";
+}
+
+// ---------- SONIDOS ----------
 const workEndSound = new Audio(workEndUrl);
 const breakEndSound = new Audio(breakEndUrl);
-workEndSound.volume = 0.3
-breakEndSound.volume=1;
+workEndSound.volume = 0.3;
+breakEndSound.volume = 1;
 
+// ---------- ESTADO ----------
 let workTime = 50 * 60;
 let breakTime = 10 * 60;
 let secondsLeft = workTime;
@@ -23,63 +28,63 @@ const lapsElement = document.getElementById("laps")!;
 const resetBtn = document.getElementById("resetBtn")!;
 const skipBtn = document.getElementById("skipBtn")!;
 const statusElement = document.getElementById("status")!;
-//sonido
 
-// Al cargar la página (unificado)
-window.addEventListener('DOMContentLoaded', () => {
+// ---------- INIT ----------
+window.addEventListener("DOMContentLoaded", () => {
 
-  // pedir permiso para notificaciones
   if ("Notification" in window) {
-    Notification.requestPermission().then(permission => {
-      console.log("Permiso de notificaciones:", permission);
-    });
+    Notification.requestPermission();
   }
 
-  // cargar el estado guardado
-  const savedState = localStorage.getItem('pomodoroState');
-  if (savedState) {
-    const state = JSON.parse(savedState);
-    secondsLeft = state.secondsLeft;
-    isRunning = state.isRunning;
-    laps = state.laps;
-    mode = state.mode;
-    statusElement.textContent = state.status;
+  const saved = localStorage.getItem("pomodoroState");
+  if (saved) {
+    const st = JSON.parse(saved);
+    secondsLeft = st.secondsLeft;
+    isRunning = st.isRunning;
+    laps = st.laps;
+    mode = st.mode;
+    statusElement.textContent = st.status;
   }
 
   updateTimer();
   updateLaps();
   updateHorasHoy();
-});
+  // --- BOTÓN HAMBURGUESA ---
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
 
-function notifyModeChange(mode: "work" | "break") {
-  if (Notification.permission === "granted") {
-    new Notification("RecordPomoTime", {
-      body: mode === "work" ? "Concentración: ¡manos a la obra!" : "Descanso: Tómate un respiro",
-      icon: "./assets/notification-icon.png" // opcional, si tienes un icono
+  if (menuToggle && sidebar) {
+    menuToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
     });
   }
-}
+});
 
-
-
-
-// Funciones de timer
+// ---------- TIMER ----------
 function updateTimer() {
-  const minutes = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft % 60;
-  timerElement.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+  const min = Math.floor(secondsLeft / 60);
+  const sec = secondsLeft % 60;
+  timerElement.textContent = `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   document.title = `${timerElement.textContent} - ${mode === "work" ? "Concentración" : "Descanso"}`;
 }
 
 function updateLaps() {
   lapsElement.textContent = `Llevas ${laps} vueltas`;
-  updateHorasHoy(); //Actualiza las horas que llevo estudiando
+  updateHorasHoy();
+}
+
+function saveState() {
+  localStorage.setItem(
+    "pomodoroState",
+    JSON.stringify({ secondsLeft, isRunning, laps, mode, status: statusElement.textContent })
+  );
 }
 
 let isWaiting = false;
 
 function switchMode() {
-  isWaiting = true; // activamos espera
+  isWaiting = true;
+
   if (mode === "work") {
     laps++;
     updateLaps();
@@ -93,16 +98,13 @@ function switchMode() {
     statusElement.textContent = "Concentración";
     workEndSound.play();
   }
+
   updateTimer();
   saveState();
-  notifyModeChange(mode);
-  // Espera de 2 segundos antes de continuar el conteo
-  setTimeout(() => {
-    isWaiting = false;
-  }, 2000);
+
+  setTimeout(() => (isWaiting = false), 2000);
 }
 
-// Modifica el setInterval para respetar la espera
 setInterval(() => {
   if (!isWaiting && isRunning && secondsLeft > 0) {
     secondsLeft--;
@@ -113,144 +115,87 @@ setInterval(() => {
   }
 }, 1000);
 
-
-// Botones
-pauseBtn.addEventListener('click', () => {
+// ---------- BOTONES ----------
+pauseBtn.addEventListener("click", () => {
   isRunning = !isRunning;
   pauseBtn.textContent = isRunning ? "Pausa" : "Reanudar";
   saveState();
 });
 
-resetBtn.addEventListener('click', () => {
+resetBtn.addEventListener("click", () => {
   laps = 0;
   mode = "work";
   secondsLeft = workTime;
   statusElement.textContent = "Concentración";
   updateTimer();
-  //updateLaps();
   saveState();
 });
-const resetAllBtn = document.getElementById("resetAllBtn")!;
-resetAllBtn.addEventListener('click', () => {
+
+document.getElementById("resetAllBtn")!.addEventListener("click", () => {
   laps = 0;
   mode = "work";
   secondsLeft = workTime;
-  statusElement.textContent = "Concentración";
   updateTimer();
   updateLaps();
   saveState();
 });
 
-skipBtn.addEventListener('click', () => {
-  switchMode();
-});
+skipBtn.addEventListener("click", switchMode);
 
-// Guardar en localStorage
-function saveState() {
-  const state = { secondsLeft, isRunning, laps, mode, status: statusElement.textContent };
-  localStorage.setItem('pomodoroState', JSON.stringify(state));
-}
-// Botón hamburguesa
-window.addEventListener('DOMContentLoaded', () => {
-  const menuToggle = document.getElementById("menuToggle");
-  const sidebar = document.getElementById("sidebar");
-
-  if (menuToggle && sidebar) {
-    menuToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("collapsed");
-    });
-  }
-});
+// ---------- CALCULAR HORAS HOY ----------
 function updateHorasHoy() {
-  const horasHoy = (laps * (workTime / 60)) / 60; // workTime = 50*60
-  const horasElement = document.getElementById("horasHoy")!;
-  horasElement.textContent = `Hoy llevas estudiando ${horasHoy.toFixed(2)} horas.`;
+  const horasHoy = (laps * (workTime / 60)) / 60;
+  document.getElementById("horasHoy")!.textContent =
+    `Hoy llevas estudiando ${horasHoy.toFixed(2)} horas.`;
 }
-// ===========================
-//     📌 GUARDAR EN BD
-// ===========================
 
-// Config
-
-
-// Obtener fecha YYYY-MM-DD
+// ---------- UTIL ----------
 function getHoyISO() {
-  const hoy = new Date();
-  const y = hoy.getFullYear();
-  const m = String(hoy.getMonth() + 1).padStart(2, "0");
-  const d = String(hoy.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
-// Buscar si ya existe registro de hoy
+
+// ---------- OBTENER REGISTRO HOY ----------
 async function obtenerRegistroHoy() {
   const fecha = getHoyISO();
-  const resp = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${fecha}`);
-  if (!resp.ok) return null;
+  console.log("Token actual:", localStorage.getItem("authToken"));
 
-  const data = await resp.json();
+  const data = await api.get(`/tiempo/semanal?fecha=${fecha}`);
   return data.find((r: any) => r.fecha === fecha) || null;
 }
 
-// Crear o actualizar registro
+// ---------- GUARDAR ----------
 async function guardarEstudio() {
   const fecha = getHoyISO();
-  const minutos = laps * 50; // cada lap = 50 minutos de trabajo
+  const minutos = laps * 50;
 
   const hoyRegistro = await obtenerRegistroHoy();
 
   if (!hoyRegistro) {
-    // ---- Crear nuevo registro ----
-    const resp = await fetch(`${API_URL}/crear`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        usuarioId,
-        fecha,
-        minutosEstudiados: minutos
-      })
+    await api.post("/tiempo/crear", {
+      fecha,
+      minutosEstudiados: minutos
     });
 
-    if (resp.ok) {
-      alert("Tiempo guardado exitosamente ✔");
-    } else {
-      alert("Error al guardar ❌");
-    }
+    alert("Tiempo guardado ✔");
 
   } else {
-    // ---- Actualizar registro existente ----
-    const resp = await fetch(`${API_URL}/actualizar/${hoyRegistro.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        usuarioId,
-        fecha,
-        minutosEstudiados: minutos
-      })
+    console.log("Token actual:", localStorage.getItem("authToken"));
+
+    await api.put(`/tiempo/actualizar/${hoyRegistro.id}`, {
+      fecha,
+      minutosEstudiados: minutos
     });
 
-    if (resp.ok) {
-      alert("Tiempo actualizado ✔");
-    } else {
-      alert("Error al actualizar ❌");
-    }
+    alert("Tiempo actualizado ✔");
   }
 }
 
-// Vincular botón
 document.getElementById("guardarBtn")!.addEventListener("click", guardarEstudio);
-// ----------------------- LOGOUT --------------------------
 
-const logoutBtn = document.getElementById("logoutBtn");
-
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    // borrar usuario guardado
-    localStorage.removeItem("usuario");
-
-    // opcional: limpiar todo localStorage
-    // localStorage.clear();
-
-    // redirigir al login
-    window.location.href = "../../pages/login/login.html";
-  });
-}
+// ---------- LOGOUT ----------
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+  localStorage.removeItem("usuario");
+  localStorage.removeItem("authToken");
+  window.location.href = "../../pages/login/login.html";
+});

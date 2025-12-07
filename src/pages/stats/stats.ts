@@ -1,4 +1,7 @@
-// Botón hamburguesa
+import api from "../../api/api";
+
+// ------------------ BOTÓN HAMBURGUESA ------------------
+
 window.addEventListener("DOMContentLoaded", () => {
   const menuToggle = document.getElementById("menuToggle");
   const sidebar = document.getElementById("sidebar");
@@ -10,41 +13,33 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ------------------ OBTENER USUARIO LOGUEADO ------------------
+// ------------------ VALIDAR LOGIN ------------------
 
 const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
 
-// si no hay usuario → ir al login
-if (!usuario || !usuario.id) {
+if (!usuario || !usuario.token) {
   window.location.href = "../../pages/login/login.html";
 }
 
-const usuarioId = usuario.id;
+// ------------------ FECHA HOY ISO ------------------
 
-// --------------------------------------------------------------
-
-function getHoyISO() {
+function getHoyISO(): string {
   const hoy = new Date();
-  const y = hoy.getFullYear();
-  const m = String(hoy.getMonth() + 1).padStart(2, "0");
-  const d = String(hoy.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, "0")}-${String(hoy.getDate()).padStart(2, "0")}`;
 }
 
-// API
-const API_URL = `${import.meta.env.VITE_API_URL}/tiempo`;
 const hoy = getHoyISO();
 
-// ------------------- HORAS SEMANA ----------------------
+// ------------------ CALCULAR HORAS SEMANA ------------------
 
 async function fetchHorasSemana(): Promise<number> {
   try {
-    const response = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${hoy}`);
-    if (!response.ok) throw new Error("Error en la API");
+    console.log("Token actual:", localStorage.getItem("authToken"));
 
-    const data = await response.json();
+    const data = await api.get(`/tiempo/semanal?fecha=${hoy}`);
+
     const totalMinutos = data.reduce(
-      (acc: number, registro: any) => acc + registro.minutosEstudiados,
+      (acc: number, reg: any) => acc + reg.minutosEstudiados,
       0
     );
 
@@ -56,26 +51,24 @@ async function fetchHorasSemana(): Promise<number> {
 }
 
 function toISOlocal(date: Date) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-// ------------------- CALENDARIO SEMANA --------------------
+// ------------------ RENDER SEMANA ------------------
 
 async function renderSemana() {
-  const response = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${hoy}`);
-  const registros = await response.json();
+  console.log("Token actual:", localStorage.getItem("authToken"));
+
+  const registros = await api.get(`/tiempo/semanal?fecha=${hoy}`);
 
   const hoyDate = new Date(hoy);
   const diaSemana = hoyDate.getDay();
   const offset = diaSemana === 0 ? -6 : 1 - diaSemana;
+
   const lunes = new Date(hoyDate);
   lunes.setDate(hoyDate.getDate() + offset);
 
-  const opcionesMes = { month: "long" } as const;
-  const mesNombre = lunes.toLocaleDateString("es-ES", opcionesMes);
+  const mesNombre = lunes.toLocaleDateString("es-ES", { month: "long" });
   const year = lunes.getFullYear();
 
   document.getElementById("tituloSemana")!.innerText =
@@ -105,29 +98,21 @@ async function renderSemana() {
   }
 }
 
-// ----------------------- INICIO --------------------------
+// ------------------ INICIO ------------------
 
 if (window.location.pathname.endsWith("semana.html")) {
-  fetchHorasSemana().then(h =>
-    (document.getElementById("horasSemana")!.innerText =
-      `Has estudiado ${h} horas esta semana.`)
-  );
+  fetchHorasSemana().then(h => {
+    document.getElementById("horasSemana")!.innerText =
+      `Has estudiado ${h} horas esta semana.`;
+  });
 
   renderSemana();
 }
-// ----------------------- LOGOUT --------------------------
 
-const logoutBtn = document.getElementById("logoutBtn");
+// ------------------ LOGOUT ------------------
 
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    // borrar usuario guardado
-    localStorage.removeItem("usuario");
-
-    // opcional: limpiar todo localStorage
-    // localStorage.clear();
-
-    // redirigir al login
-    window.location.href = "../../pages/login/login.html";
-  });
-}
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+  localStorage.removeItem("usuario");
+  localStorage.removeItem("authToken");
+  window.location.href = "../../pages/login/login.html";
+});
