@@ -184,16 +184,14 @@ function getHoyISO() {
 // Buscar si ya existe registro de hoy
 async function obtenerRegistroHoy() {
   const fecha = getHoyISO();
-  const resp = await fetch(`${API_URL}/semanal?fecha=${fecha}`, {
-    credentials: "include" // <-- importante
-  });
+  const resp = await fetch(`${API_URL}/semanal/${usuarioId}?fecha=${fecha}`);
   if (!resp.ok) return null;
 
   const data = await resp.json();
   return data.find((r: any) => r.fecha === fecha) || null;
 }
 
-//Crear o actualizar registro
+// Crear o actualizar registro
 async function guardarEstudio() {
   const fecha = getHoyISO();
   const minutos = laps * 50; // cada lap = 50 minutos de trabajo
@@ -205,8 +203,8 @@ async function guardarEstudio() {
     const resp = await fetch(`${API_URL}/crear`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include", // <-- importante
       body: JSON.stringify({
+        usuarioId,
         fecha,
         minutosEstudiados: minutos
       })
@@ -223,8 +221,8 @@ async function guardarEstudio() {
     const resp = await fetch(`${API_URL}/actualizar/${hoyRegistro.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      credentials: "include", // <-- importante
       body: JSON.stringify({
+        usuarioId,
         fecha,
         minutosEstudiados: minutos
       })
