@@ -32,7 +32,7 @@ function getHoyISO() {
 }
 
 // API
-const API_URL = "http://localhost:8080/tiempo";
+const API_URL = `${import.meta.env.VITE_API_URL}/tiempo`;
 const hoy = getHoyISO();
 
 // ------------------- HORAS SEMANA ----------------------
