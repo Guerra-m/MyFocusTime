@@ -1,7 +1,9 @@
 import workEndUrl from '../../assets/workEnd.mp3';
 import breakEndUrl from '../../assets/breakEnd.mp3';
-const API_URL = import.meta.env.VITE_API_URL + "/tiempo";
-
+const API_URL = `${import.meta.env.VITE_API_URL}/tiempo`;
+// Obtener usuario logueado
+const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+const usuarioId = usuario ? usuario.id : 1; // fallback a 1 si no hay usuario
 
 const workEndSound = new Audio(workEndUrl);
 const breakEndSound = new Audio(breakEndUrl);

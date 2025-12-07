@@ -9,9 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-// API
-const API_URL = import.meta.env.VITE_API_URL + "/tiempo";
-const hoy = getHoyISO();
+
 
 // ------------------ OBTENER USUARIO LOGUEADO ------------------
 const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
@@ -30,7 +28,9 @@ function getHoyISO() {
   return `${y}-${m}-${d}`;
 }
 
-
+// API
+const API_URL = `${import.meta.env.VITE_API_URL}/tiempo`;
+const hoy = getHoyISO();
 
 // ------------------- HORAS SEMANA ----------------------
 async function fetchHorasSemana(): Promise<number> {

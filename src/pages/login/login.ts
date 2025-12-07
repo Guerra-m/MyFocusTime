@@ -1,5 +1,5 @@
 
-const API_URL = import.meta.env.VITE_API_URL + "/usuarios/login";
+const API_URL = `${import.meta.env.VITE_API_URL}/usuarios/login`;
 
 const form = document.getElementById("loginForm") as HTMLFormElement;
 const errorMsg = document.getElementById("errorMsg") as HTMLParagraphElement;
