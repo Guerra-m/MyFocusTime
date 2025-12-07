@@ -158,7 +158,6 @@ function getHoyISO() {
 // ---------- OBTENER REGISTRO HOY ----------
 async function obtenerRegistroHoy() {
   const fecha = getHoyISO();
-  console.log("Token actual:", localStorage.getItem("authToken"));
 
   const data = await api.get(`/tiempo/semanal?fecha=${fecha}`);
   return data.find((r: any) => r.fecha === fecha) || null;
@@ -180,7 +179,6 @@ async function guardarEstudio() {
     alert("Tiempo guardado ✔");
 
   } else {
-    console.log("Token actual:", localStorage.getItem("authToken"));
 
     await api.put(`/tiempo/actualizar/${hoyRegistro.id}`, {
       fecha,

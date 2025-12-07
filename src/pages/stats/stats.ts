@@ -34,7 +34,6 @@ const hoy = getHoyISO();
 
 async function fetchHorasSemana(): Promise<number> {
   try {
-    console.log("Token actual:", localStorage.getItem("authToken"));
 
     const data = await api.get(`/tiempo/semanal?fecha=${hoy}`);
 
@@ -57,7 +56,6 @@ function toISOlocal(date: Date) {
 // ------------------ RENDER SEMANA ------------------
 
 async function renderSemana() {
-  console.log("Token actual:", localStorage.getItem("authToken"));
 
   const registros = await api.get(`/tiempo/semanal?fecha=${hoy}`);
 
