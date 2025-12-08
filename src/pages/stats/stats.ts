@@ -59,28 +59,45 @@ async function renderSemana() {
 
   const registros = await api.get(`/tiempo/semanal?fecha=${hoy}`);
 
-  const hoyDate = new Date(hoy);
-  const diaSemana = hoyDate.getDay();
-  const offset = diaSemana === 0 ? -6 : 1 - diaSemana;
+  const [y, m, d] = hoy.split("-").map(Number);
+  const hoyDate = new Date(y, m - 1, d); // FECHA LOCAL REAL
+  let diaSemana = hoyDate.getDay(); // 0=Domingo, 1=Lunes, ..., 6=Sábado
 
-  const lunes = new Date(hoyDate);
-  lunes.setDate(hoyDate.getDate() + offset);
+  // -------------------------
+  // 🔥 Forzar que la semana inicie en Lunes
+  // -------------------------
 
-  const mesNombre = lunes.toLocaleDateString("es-ES", { month: "long" });
-  const year = lunes.getFullYear();
+  // Ajustar domingo (0) para que quede al final de la semana
+  if (diaSemana === 0) diaSemana = 7;
+
+  // Calcular el lunes de la semana actual
+  const inicio = new Date(hoyDate);
+  inicio.setDate(hoyDate.getDate() - (diaSemana - 1));
+
+  // -------------------------
+  // TÍTULO (MES + AÑO)
+  // -------------------------
+
+  const mesNombre = inicio.toLocaleDateString("es-ES", { month: "long" });
+  const year = inicio.getFullYear();
 
   document.getElementById("tituloSemana")!.innerText =
     `${mesNombre.toUpperCase()} ${year}`;
+
+  // -------------------------
+  // RENDER DE LUNES → DOMINGO
+  // -------------------------
 
   const contenedor = document.getElementById("calendarWeek")!;
   contenedor.innerHTML = "";
 
   for (let i = 0; i < 7; i++) {
-    const dia = new Date(lunes);
-    dia.setDate(lunes.getDate() + i);
+    const dia = new Date(inicio);
+    dia.setDate(inicio.getDate() + i);
 
     const fechaISO = toISOlocal(dia);
     const registro = registros.find((r: any) => r.fecha === fechaISO);
+
     const minutos = registro ? registro.minutosEstudiados : 0;
     const horas = (minutos / 60).toFixed(1);
 
@@ -95,6 +112,9 @@ async function renderSemana() {
     contenedor.appendChild(div);
   }
 }
+
+
+
 
 // ------------------ INICIO ------------------
 
