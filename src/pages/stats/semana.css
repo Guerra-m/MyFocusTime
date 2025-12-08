@@ -52,3 +52,46 @@
   padding: 1rem;
   text-align: center;
 }
+.week-controls {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.week-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 22px;
+  border-radius: 10px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* HOVER */
+.week-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* CLICK */
+.week-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+/* OPCIONAL: versión dark */
+body.dark .week-btn {
+  background: rgba(40, 40, 40, 0.6);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.contenedor-semanaStats{
+  width: 1200px;
+  margin: 0 20%;
+}

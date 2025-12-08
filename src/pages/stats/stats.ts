@@ -30,14 +30,19 @@ function getHoyISO(): string {
 
 const hoy = getHoyISO();
 
-// ------------------ CALCULAR HORAS SEMANA ------------------
+// ------------------ UTIL: FECHA A ISO ------------------
 
-async function fetchHorasSemana(): Promise<number> {
+function toISOlocal(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+// ------------------ CALCULAR HORAS DE UNA SEMANA ------------------
+
+async function fetchHorasDeSemana(fechaInicioISO: string): Promise<number> {
   try {
+    const registros = await api.get(`/tiempo/semanal?fecha=${fechaInicioISO}`);
 
-    const data = await api.get(`/tiempo/semanal?fecha=${hoy}`);
-
-    const totalMinutos = data.reduce(
+    const totalMinutos = registros.reduce(
       (acc: number, reg: any) => acc + reg.minutosEstudiados,
       0
     );
@@ -49,45 +54,50 @@ async function fetchHorasSemana(): Promise<number> {
   }
 }
 
-function toISOlocal(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
+// ------------------ NAVEGACIÓN ENTRE SEMANAS ------------------
 
-// ------------------ RENDER SEMANA ------------------
+let semanaOffset = 0;
+// 0 = semana actual
+// -1 = semana anterior
+// +1 = semana siguiente
+
+// ------------------ RENDER SEMANA COMPLETA ------------------
 
 async function renderSemana() {
 
-  const registros = await api.get(`/tiempo/semanal?fecha=${hoy}`);
-
+  // Hoy
   const [y, m, d] = hoy.split("-").map(Number);
-  const hoyDate = new Date(y, m - 1, d); // FECHA LOCAL REAL
-  let diaSemana = hoyDate.getDay(); // 0=Domingo, 1=Lunes, ..., 6=Sábado
+  const hoyDate = new Date(y, m - 1, d);
 
-  // -------------------------
-  // 🔥 Forzar que la semana inicie en Lunes
-  // -------------------------
-
-  // Ajustar domingo (0) para que quede al final de la semana
+  // Obtener día de la semana (convertimos domingo=7)
+  let diaSemana = hoyDate.getDay();
   if (diaSemana === 0) diaSemana = 7;
 
-  // Calcular el lunes de la semana actual
+  // Lunes de la semana actual
   const inicio = new Date(hoyDate);
   inicio.setDate(hoyDate.getDate() - (diaSemana - 1));
 
-  // -------------------------
-  // TÍTULO (MES + AÑO)
-  // -------------------------
+  // Aplicar desplazamiento de semanas
+  inicio.setDate(inicio.getDate() + semanaOffset * 7);
 
+  // Lunes en ISO
+  const fechaInicioISO = toISOlocal(inicio);
+
+  // Obtener registros de esta semana navegada
+  const registros = await api.get(`/tiempo/semanal?fecha=${fechaInicioISO}`);
+
+  // HORAS TOTALES
+  const horasSemana = await fetchHorasDeSemana(fechaInicioISO);
+  document.getElementById("horasSemana")!.innerText =
+    `Has estudiado ${horasSemana} horas esta semana.`;
+
+  // TITULO (MES + AÑO)
   const mesNombre = inicio.toLocaleDateString("es-ES", { month: "long" });
   const year = inicio.getFullYear();
-
   document.getElementById("tituloSemana")!.innerText =
     `${mesNombre.toUpperCase()} ${year}`;
 
-  // -------------------------
-  // RENDER DE LUNES → DOMINGO
-  // -------------------------
-
+  // RENDER DÍAS
   const contenedor = document.getElementById("calendarWeek")!;
   contenedor.innerHTML = "";
 
@@ -113,19 +123,23 @@ async function renderSemana() {
   }
 }
 
-
-
-
 // ------------------ INICIO ------------------
 
 if (window.location.pathname.endsWith("semana.html")) {
-  fetchHorasSemana().then(h => {
-    document.getElementById("horasSemana")!.innerText =
-      `Has estudiado ${h} horas esta semana.`;
-  });
-
   renderSemana();
 }
+
+// ------------------ BOTONES ANTERIOR / SIGUIENTE ------------------
+
+document.getElementById("semanaAnterior")?.addEventListener("click", () => {
+  semanaOffset -= 1;
+  renderSemana();
+});
+
+document.getElementById("semanaSiguiente")?.addEventListener("click", () => {
+  semanaOffset += 1;
+  renderSemana();
+});
 
 // ------------------ LOGOUT ------------------
 
