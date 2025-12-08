@@ -1,40 +1,61 @@
-/* Centrado total */
+/* RESET Y BODY */
 body, html {
   height: 100%;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f3f3;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #121212;  /* Fondo base oscuro */
+  color: white;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  /* Fondo tipo puntitos */
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
+/* Título principal */
+main h1 {
+  margin-top: 40px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #1984db;
+  text-align: center;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+}
+
+/* Centrado del login */
 main {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 /* Caja del login */
 .login-container {
-  background: white;
+  background: #1d1f27;  /* Fondo tipo sidebar */
   width: 320px;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.7);
   text-align: center;
+  margin-top: 20px;
 }
 
 .login-container h2 {
   margin-bottom: 20px;
   font-size: 24px;
+  color: white;
 }
 
 /* Input group */
 .input-group {
   text-align: left;
   margin-bottom: 15px;
-  margin-right: 22px;
+  margin-right: 20px;
 }
 
 .input-group label {
@@ -42,32 +63,48 @@ main {
   margin-bottom: 5px;
   font-weight: bold;
   font-size: 14px;
+  color: #bbbbbb;
 }
 
 .input-group input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #888;
+  border: 1px solid #323545;
   border-radius: 6px;
   font-size: 16px;
+  background: #121212;
+  color: white;
+  
 }
 
 /* Botón */
 .btn-login {
   width: 100%;
   padding: 12px;
-  background: #4A90E2;
+  background: linear-gradient(135deg, #1984db, #0b528b);
   color: white;
   border: none;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
-  transition: 0.3s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-login:hover {
-  background: #3b7ac2;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 12px rgba(13, 56, 105, 0.75);
+}
+
+.btn-login:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 6px rgba(7, 45, 94, 0.4);
+}
+
+/* Mensaje de error */
+#errorMsg {
+  color: #ff4c4c;
+  margin-top: 10px;
 }
 
 /* Texto inferior */
@@ -78,9 +115,8 @@ main {
 
 .register-text a {
   text-decoration: none;
-  color: #4A90E2;
+  color: #1984db;
 }
-
 
 /* FOOTER */
 footer {
@@ -94,4 +130,26 @@ footer {
   font-size: 14px;
   color: #ccc;
   border-top: 1px solid #333;
+}
+/* Animación del título */
+@keyframes fadeDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main h1 {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #00d1ff; /* azul brillante */
+  text-align: center;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+  animation: fadeDown 1s ease-out forwards; /* aplicamos la animación */
 }
