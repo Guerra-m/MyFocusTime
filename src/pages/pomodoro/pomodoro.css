@@ -80,18 +80,18 @@ aside li:hover {
 }
 
 /* MAIN */
-main {
+.pomodoro-page main {
   padding: 40px;
   transition: margin-left 0.3s ease;
 }
 
 /* Cuando el menú está abierto: desplazar main */
-aside:not(.collapsed) ~ main {
+.pomodoro-page aside:not(.collapsed) ~ main {
   margin-left: 220px;
 }
 
 /* Cuando está cerrado: normal */
-aside.collapsed ~ main {
+.pomodoro-page aside.collapsed ~ main {
   margin-left: 0;
 }
 

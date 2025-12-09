@@ -8,7 +8,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (menuToggle && sidebar) {
     menuToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("collapsed");
+      sidebar.classList.toggle("open");
+
     });
   }
 });

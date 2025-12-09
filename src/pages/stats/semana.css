@@ -92,6 +92,33 @@ body.dark .week-btn {
 }
 
 .contenedor-semanaStats{
-  width: 1200px;
-  margin: 0 20%;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;       /* el ancho del aside */
+  height: 100vh;
+  background: #1d1f27;
+  padding-top: 20px;
+  transform: translateX(-250px);
+  transition: transform .3s ease;
+  padding-top: 5rem;
+}
+
+/* cuando está abierto */
+#sidebar.open {
+  transform: translateX(0);
+}
+main {
+  margin-left: 0;            /* no reservar espacio */
+  width: 100%;
+  transition: filter .3s ease;
+}
+main.blurred {
+  filter: blur(2px);
 }
