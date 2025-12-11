@@ -119,6 +119,7 @@ setInterval(() => {
 pauseBtn.addEventListener("click", () => {
   isRunning = !isRunning;
   pauseBtn.textContent = isRunning ? "Pausa" : "Reanudar";
+  updateHorasHoy();
   saveState();
 });
 
@@ -144,10 +145,23 @@ skipBtn.addEventListener("click", switchMode);
 
 // ---------- CALCULAR HORAS HOY ----------
 function updateHorasHoy() {
-  const horasHoy = (laps * (workTime / 60)) / 60;
+  // Minutos completos por vueltas
+  const minutosPorVueltas = laps * (workTime / 60);
+
+  // Minutos parciales del ciclo actual (solo si estás en modo trabajo)
+  let minutosParciales = 0;
+
+  if (mode === "work") {
+    const trabajadoEnCicloActual = workTime - secondsLeft;
+    minutosParciales = trabajadoEnCicloActual / 60;
+  }
+
+  const totalHoras = (minutosPorVueltas + minutosParciales) / 60;
+
   document.getElementById("horasHoy")!.textContent =
-    `Hoy llevas estudiando ${horasHoy.toFixed(2)} horas.`;
+    `Hoy llevas estudiando ${totalHoras.toFixed(2)} horas.`;
 }
+
 
 // ---------- UTIL ----------
 function getHoyISO() {
@@ -166,7 +180,17 @@ async function obtenerRegistroHoy() {
 // ---------- GUARDAR ----------
 async function guardarEstudio() {
   const fecha = getHoyISO();
-  const minutos = laps * 50;
+
+  const minutosPorVueltas = laps * (workTime / 60);
+
+  let minutosParciales = 0;
+  if (mode === "work") {
+    minutosParciales = getMinutosParcialesVisibles();
+  }
+
+  const minutos = Math.floor(minutosPorVueltas + minutosParciales);
+
+  console.log("Minutos a guardar:", minutos);
 
   const hoyRegistro = await obtenerRegistroHoy();
 
@@ -175,19 +199,17 @@ async function guardarEstudio() {
       fecha,
       minutosEstudiados: minutos
     });
-
     alert("Tiempo guardado ✔");
-
   } else {
-
     await api.put(`/tiempo/actualizar/${hoyRegistro.id}`, {
       fecha,
       minutosEstudiados: minutos
     });
-
     alert("Tiempo actualizado ✔");
   }
 }
+
+
 
 document.getElementById("guardarBtn")!.addEventListener("click", guardarEstudio);
 
@@ -197,3 +219,10 @@ document.getElementById("logoutBtn")?.addEventListener("click", () => {
   localStorage.removeItem("authToken");
   window.location.href = "../../pages/login/login.html";
 });
+function getMinutosParcialesVisibles() {
+  const texto = timerElement.textContent!; // "24:35"
+  const [min, sec] = texto.split(":").map(Number);
+  const restante = min * 60 + sec;
+  const trabajado = workTime - restante;
+  return trabajado > 0 ? trabajado / 60 : 0;
+}
