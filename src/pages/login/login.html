@@ -11,83 +11,85 @@
 
 <body>
 
- <main>
-  <h1>MyFocusTime</h1>
-  <section class="login-container">
-    <h2>Iniciar Sesión</h2>
+  <main>
+    <h1>MyFocusTime</h1>
+    <section class="login-container">
+      <h2>Iniciar Sesión</h2>
 
-    <form id="loginForm">
-      <div class="input-group">
-        <label for="mail">Correo</label>
-        <input type="email" id="mail" name="mail" required>
-      </div>
+      <form id="loginForm">
+        <div class="input-group">
+          <label for="mail">Correo</label>
+          <input type="email" id="mail" name="mail" required>
+        </div>
 
-      <div class="input-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" name="password" required>
-      </div>
+        <div class="input-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" required>
+        </div>
 
-      <button class="btn-login" type="submit">Entrar</button>
+        <button class="btn-login" type="submit">Entrar</button>
 
-      <p id="errorMsg" style="color:red; display:none;">
-        Usuario o contraseña incorrectos
+        <p id="errorMsg" style="color:red; display:none;">
+          Usuario o contraseña incorrectos
+        </p>
+
+        <p class="register-text">
+          ¿No tenés cuenta? <a href="../register/register.html">Registrate</a>
+        </p>
+      </form>
+    </section>
+  </main>
+  <section class="info-section">
+
+    <div class="info-block">
+      <h2>¿Qué es MyFocusTime?</h2>
+      <p>
+        MyFocusTime es una aplicación de productividad basada en la técnica
+        <strong>Pomodoro</strong>, pero con una diferencia clave:
+        <strong>no solo te ayuda a concentrarte, sino que registra tus horas reales de estudio</strong>.
       </p>
-
-      <p class="register-text">
-        ¿No tenés cuenta? <a href="../register/register.html">Registrate</a>
-      </p>
-    </form>
-  </section>
-</main>
-<section class="info-section">
-
-  <div class="info-block">
-    <h2>¿Qué es MyFocusTime?</h2>
-    <p>
-      MyFocusTime es una aplicación de productividad basada en la técnica
-      <strong>Pomodoro</strong>, pero con una diferencia clave:
-      <strong>no solo te ayuda a concentrarte, sino que registra tus horas reales de estudio</strong>.
-    </p>
-  </div>
-
-  <div class="info-block">
-    <h2>¿Qué la hace diferente?</h2>
-    <p>
-      A diferencia de otras apps Pomodoro, MyFocusTime te permite
-      <strong>guardar y visualizar tu tiempo de estudio</strong> de forma clara:
-    </p>
-
-    <ul>
-      <li>Registro diario automático</li>
-      <li>Estadísticas semanales, mensuales y anuales</li>
-      <li> Control real de tu progreso</li>
-      <li> Tiempos de concentración y descanso configurables</li>
-    </ul>
-  </div>
-
-  <div class="info-block">
-    <h2>Así se ve MyFocusTime</h2>
-
-    <div class="screenshots">
-      <img src="../../assets/capturas/Pomodoro.png" alt="Imágen Pomodoro">
-      <img src="../../assets/capturas/semanaStats.png" alt="Imágen Semana de estudio">
-      <img src="../../assets/capturas/MesStats.png" alt="Imágen Mes de estudio">
-      <img src="../../assets/capturas/AnioStats.png" alt="Imágen Año de estudio">
-      <img src="../../assets/capturas/Config.png" alt="Imágen Configuración de estudio">
-
     </div>
-  </div>
 
-</section>
+    <div class="info-block">
+      <h2>¿Qué la hace diferente?</h2>
+      <p>
+        A diferencia de otras apps Pomodoro, MyFocusTime te permite
+        <strong>guardar y visualizar tu tiempo de estudio</strong> de forma clara:
+      </p>
 
+      <ul>
+        <li>✔️Registro diario automático</li>
+        <li>✔️Estadísticas semanales, mensuales y anuales</li>
+        <li>✔️Control real de tu progreso</li>
+        <li>✔️Tiempos de concentración y descanso configurables</li>
+      </ul>
+    </div>
 
+    <div class="info-block">
+      <h2>Así se ve MyFocusTime</h2>
 
+      <div class="screenshots">
+        <img src="../../assets/capturas/Pomodoro.png" alt="Imágen Pomodoro">
+        <img src="../../assets/capturas/semanaStats.png" alt="Imágen Semana de estudio">
+        <img src="../../assets/capturas/MesStats.png" alt="Imágen Mes de estudio">
+        <img src="../../assets/capturas/AnioStats.png" alt="Imágen Año de estudio">
+        <img src="../../assets/capturas/Config.png" alt="Imágen Configuración de estudio">
 
+      </div>
+    </div>
 
+  </section>
 
-  <footer>
-    - Guerra - Todos los derechos reservados -
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span>© 2025 MyFocusTime</span>
+      <span class="footer-sep">•</span>
+      <span>Desarrollado por Guerra</span>
+      <span class="footer-sep">•</span>
+      <span>Productividad & Seguimiento real</span>
+    </div>
   </footer>
+
   <script src="./login.ts" type="module"></script>
 
 </body>

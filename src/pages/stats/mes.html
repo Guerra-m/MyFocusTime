@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Horas este mes</title>
   <link rel="stylesheet" href="../pomodoro/pomodoro.css">
-   <link rel="stylesheet" href="../stats/semana.css">
+  <link rel="stylesheet" href="../stats/semana.css">
 </head>
+
 <body>
-<!-- Botón hamburger -->
+  <!-- Botón hamburger -->
   <button id="menuToggle" class="hamburger">☰</button>
   <aside id="sidebar">
     <nav>
@@ -23,29 +25,43 @@
   </aside>
 
   <main>
-  <div class="contenedor-semanaStats">
+    <div class="contenedor-semanaStats">
 
-    <h1 id="tituloMes" class="titulo-mes"></h1>
+      <h1 id="tituloMes" class="titulo-mes"></h1>
 
-    <div class="week-controls">
-      <button id="mesAnterior" class="week-btn">◀ Mes anterior</button>
-      <button id="mesSiguiente" class="week-btn">Mes siguiente ▶</button>
+      <div class="week-controls">
+        <button id="mesAnterior" class="week-btn">◀ Mes anterior</button>
+        <button id="mesSiguiente" class="week-btn">Mes siguiente ▶</button>
+      </div>
+
+      <div class="week-header">
+        <div>Lun</div>
+        <div>Mar</div>
+        <div>Mié</div>
+        <div>Jue</div>
+        <div>Vie</div>
+        <div>Sáb</div>
+        <div>Dom</div>
+      </div>
+
+      <div id="calendarMonth" class="calendar-month"></div>
+
+      <p id="horasMes" class="horasSemana"></p>
+
     </div>
+  </main>
 
-    <div class="week-header">
-      <div>Lun</div><div>Mar</div><div>Mié</div>
-      <div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span>© 2025 MyFocusTime</span>
+      <span class="footer-sep">•</span>
+      <span>Desarrollado por Guerra</span>
+      <span class="footer-sep">•</span>
+      <span>Productividad & Seguimiento real</span>
     </div>
-
-    <div id="calendarMonth" class="calendar-month"></div>
-
-    <p id="horasMes" class="horasSemana"></p>
-
-  </div>
-</main>
-
-
+  </footer>
   <script type="module" src="./stats.ts"></script>
 
 </body>
+
 </html>

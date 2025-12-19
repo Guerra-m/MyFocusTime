@@ -7,7 +7,7 @@ body, html {
   color: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   justify-content: flex-start;
 
   /* Fondo tipo puntitos */
@@ -17,6 +17,7 @@ body, html {
 
 /* Título principal */
 main h1 {
+  flex: 1;
   margin-top: 40px;
   font-size: 36px;
   font-weight: bold;
@@ -120,7 +121,6 @@ main {
 
 /* FOOTER */
 footer {
-  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -148,10 +148,10 @@ main h1 {
   margin-bottom: 30px;
   font-size: 36px;
   font-weight: bold;
-  color: #00d1ff; /* azul brillante */
+  color: #00d1ff; 
   text-align: center;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
-  animation: fadeDown 1s ease-out forwards; /* aplicamos la animación */
+  animation: fadeDown 1s ease-out forwards; 
 }
 /* ---------- INFO SECTION ---------- */
 
@@ -206,7 +206,7 @@ main h1 {
 /* Primera imagen más grande */
 .screenshots img:first-child {
   width: 50%;
-  grid-column: span 2;   /* ocupa dos columnas */
+  grid-column: span 2;  
   margin: 0 auto;
 }
 
@@ -221,4 +221,37 @@ main h1 {
 .screenshots img:hover {
   transform: scale(1.04);
   box-shadow: 0 16px 40px rgba(0,0,0,0.9);
+}
+/* ---------- FOOTER PROFESIONAL ---------- */
+.app-footer {
+  width: 100%;
+  background: rgba(29, 31, 39, 0.95);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 14px 0;
+  margin-top: 60px; 
+}
+
+.footer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 14px;
+  color: #b5b5b5;
+  letter-spacing: 0.3px;
+}
+
+.footer-content span {
+  white-space: nowrap;
+}
+
+.footer-sep {
+  margin: 0 8px;
+  opacity: 0.4;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .footer-content {
+    font-size: 13px;
+  }
 }

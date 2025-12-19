@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <title>Pomodoro</title>
   <link rel="stylesheet" href="./pomodoro.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7574523768529448"
-     crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
 </head>
+
 <body class="pomodoro-page">
 
   <!-- Botón hamburger -->
@@ -40,7 +42,7 @@
 
       <div class="controls">
         <button id="resetAllBtn">Resetear todo</button>
-        
+
         <button id="skipBtn">Saltar</button>
       </div>
       <!--  -->
@@ -50,22 +52,51 @@
       </section>
       <!-- Spo -->
       <div class="spotify-container">
-        <iframe
-          style="border-radius:12px"
-          src="https://open.spotify.com/embed/playlist/37i9dQZF1DXbtuVQL4zoey"
-          width="100%"
-          height="152"
-          frameborder="0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy">
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXbtuVQL4zoey"
+          width="100%" height="152" frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
         </iframe>
       </div>
 
     </div>
   </main>
+<section class="info-section">
 
-  <footer>
-    - Guerra - Todos los derechos reservados -
+    <div class="info-block">
+      <h2>¿Qué es MyFocusTime?</h2>
+      <p>
+        MyFocusTime es una aplicación de productividad basada en la técnica
+        <strong>Pomodoro</strong>, pero con una diferencia clave:
+        <strong>no solo te ayuda a concentrarte, sino que registra tus horas reales de estudio</strong>.
+      </p>
+    </div>
+
+    <div class="info-block">
+      <h2>¿Qué la hace diferente?</h2>
+      <p>
+        A diferencia de otras apps Pomodoro, MyFocusTime te permite
+        <strong>guardar y visualizar tu tiempo de estudio</strong> de forma clara:
+      </p>
+
+      <ul>
+        <li>✔️Registro diario automático</li>
+        <li>✔️Estadísticas semanales, mensuales y anuales</li>
+        <li>✔️Control real de tu progreso</li>
+        <li>✔️Tiempos de concentración y descanso configurables</li>
+      </ul>
+    </div>
+
+    
+
+  </section>
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span>© 2025 MyFocusTime</span>
+      <span class="footer-sep">•</span>
+      <span>Desarrollado por Guerra</span>
+      <span class="footer-sep">•</span>
+      <span>Productividad & Seguimiento real</span>
+    </div>
   </footer>
 
   <script type="module" src="./pomodoro.ts"></script>
@@ -74,4 +105,5 @@
 
 
 </body>
+
 </html>

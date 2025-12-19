@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,30 +24,39 @@
     </nav>
   </aside>
   <main>
-  <div class="settings-container">
-    <h1>Configuración</h1>
+    <div class="settings-container">
+      <h1>Configuración</h1>
 
-    <div class="setting">
-  <label>Tiempo de concentración (min)</label>
-   <div class="setting-row">
-    <input id="focusTime" type="number" min="1">
-    <button id="saveFocus" class="settings-btn">Guardar</button>
-  </div>
-</div>
+      <div class="setting">
+        <label>Tiempo de concentración (min)</label>
+        <div class="setting-row">
+          <input id="focusTime" type="number" min="1">
+          <button id="saveFocus" class="settings-btn">Guardar</button>
+        </div>
+      </div>
 
-<div class="setting">
-  <label>Tiempo de descanso (min)</label>
-  <div class="setting-row">
-  <input id="breakTime" type="number" min="1">
-  <button id="saveBreak" class="settings-btn">Guardar</button>
-  </div>
-</div>
+      <div class="setting">
+        <label>Tiempo de descanso (min)</label>
+        <div class="setting-row">
+          <input id="breakTime" type="number" min="1">
+          <button id="saveBreak" class="settings-btn">Guardar</button>
+        </div>
+      </div>
 
-    <p id="settingsMsg"></p>
-  </div>
-</main>
-
-<script type="module" src="./settings.ts"></script>
+      <p id="settingsMsg"></p>
+    </div>
+  </main>
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span>© 2025 MyFocusTime</span>
+      <span class="footer-sep">•</span>
+      <span>Desarrollado por Guerra</span>
+      <span class="footer-sep">•</span>
+      <span>Productividad & Seguimiento real</span>
+    </div>
+  </footer>
+  <script type="module" src="./settings.ts"></script>
 
 </body>
+
 </html>
