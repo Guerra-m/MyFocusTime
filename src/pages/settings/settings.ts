@@ -44,3 +44,8 @@ const sidebar = document.getElementById("sidebar");
 menuToggle?.addEventListener("click", () => {
   sidebar?.classList.toggle("collapsed");
 });
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+  localStorage.removeItem("usuario");
+  localStorage.removeItem("authToken");
+  window.location.href = "../../pages/login/login.html";
+})
