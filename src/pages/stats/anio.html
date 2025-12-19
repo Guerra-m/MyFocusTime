@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Horas esta año</title>
   <link rel="stylesheet" href="../pomodoro/pomodoro.css">
+  <link rel="stylesheet" href="../stats/semana.css">
 </head>
 
 <body>
@@ -23,9 +24,17 @@
     </nav>
   </aside>
 
-  <main>
-    <h1>Proximamente...</h1>
-    <p id="horasAnio"></p>
+  <main class="contenedor-semanaStats">
+    <h1 id="tituloAnio"></h1>
+
+    <div class="week-controls">
+      <button id="anioAnterior" class="week-btn">◀ Año anterior</button>
+      <button id="anioSiguiente" class="week-btn">Año siguiente ▶</button>
+    </div>
+
+    <div id="calendarYear" class="calendar-year"></div>
+
+    <p id="horasAnio" class="horasSemana"></p>
   </main>
 
   <script type="module" src="./stats.ts"></script>

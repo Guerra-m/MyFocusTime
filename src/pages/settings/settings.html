@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../pomodoro/pomodoro.css">
+  <link rel="stylesheet" href="./settings.css">
   <title>Settings</title>
 </head>
+
 <body>
   <button id="menuToggle" class="hamburger">☰</button>
   <aside id="sidebar">
@@ -21,8 +23,30 @@
     </nav>
   </aside>
   <main>
-    <h1>Proximamente...</h1>
-  </main>
-  <script type="module" src="../stats/stats.ts"></script>
+  <div class="settings-container">
+    <h1>Configuración</h1>
+
+    <div class="setting">
+  <label>Tiempo de concentración (min)</label>
+   <div class="setting-row">
+    <input id="focusTime" type="number" min="1">
+    <button id="saveFocus" class="settings-btn">Guardar</button>
+  </div>
+</div>
+
+<div class="setting">
+  <label>Tiempo de descanso (min)</label>
+  <div class="setting-row">
+  <input id="breakTime" type="number" min="1">
+  <button id="saveBreak" class="settings-btn">Guardar</button>
+  </div>
+</div>
+
+    <p id="settingsMsg"></p>
+  </div>
+</main>
+
+<script type="module" src="./settings.ts"></script>
+
 </body>
 </html>

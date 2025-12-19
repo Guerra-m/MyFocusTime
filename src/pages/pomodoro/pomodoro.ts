@@ -14,11 +14,20 @@ const breakEndSound = new Audio(breakEndUrl);
 workEndSound.volume = 0.3;
 breakEndSound.volume = 1;
 
+// ---------- SETTINGS ----------
+function getWorkTime() {
+  return Number(localStorage.getItem("focusTime") ?? "25") * 60;
+}
+
+function getBreakTime() {
+  return Number(localStorage.getItem("breakTime") ?? "5") * 60;
+}
+
 // ---------- ESTADO ----------
-let workTime = 50 * 60;
-let breakTime = 10 * 60;
+let workTime = getWorkTime();
+let breakTime = getBreakTime();
 let secondsLeft = workTime;
-let isRunning = true;
+let isRunning = false;
 let mode: "work" | "break" = "work";
 let laps = 0;
 
@@ -28,6 +37,8 @@ const lapsElement = document.getElementById("laps")!;
 const resetBtn = document.getElementById("resetBtn")!;
 const skipBtn = document.getElementById("skipBtn")!;
 const statusElement = document.getElementById("status")!;
+pauseBtn.textContent = "Iniciar";
+
 
 // ---------- INIT ----------
 window.addEventListener("DOMContentLoaded", () => {
@@ -36,36 +47,62 @@ window.addEventListener("DOMContentLoaded", () => {
     Notification.requestPermission();
   }
 
+  // Releer settings actuales
+  workTime = getWorkTime();
+  breakTime = getBreakTime();
+
+  // Reset automático si cambió el focusTime
+  const lastFocusUsed = localStorage.getItem("lastFocusUsed");
+  const currentFocus = localStorage.getItem("focusTime") ?? "25";
+
+  if (lastFocusUsed !== currentFocus) {
+    laps = 0;
+    mode = "work";
+    secondsLeft = workTime;
+    localStorage.removeItem("pomodoroState");
+  }
+
+  localStorage.setItem("lastFocusUsed", currentFocus);
+
+  // Restaurar estado
   const saved = localStorage.getItem("pomodoroState");
   if (saved) {
-    const st = JSON.parse(saved);
-    secondsLeft = st.secondsLeft;
-    isRunning = st.isRunning;
-    laps = st.laps;
-    mode = st.mode;
-    statusElement.textContent = st.status;
-  }
+  const st = JSON.parse(saved);
+  secondsLeft = st.secondsLeft;
+  laps = st.laps;
+  mode = st.mode;
+  statusElement.textContent = st.status;
+}
+
+// SIEMPRE empezar pausado
+isRunning = false;
+pauseBtn.textContent = "Iniciar";
+
+
+  // Clamp de seguridad
+  if (mode === "work" && secondsLeft > workTime) secondsLeft = workTime;
+  if (mode === "break" && secondsLeft > breakTime) secondsLeft = breakTime;
 
   updateTimer();
   updateLaps();
   updateHorasHoy();
-  // --- BOTÓN HAMBURGUESA ---
+
+  // Botón hamburguesa
   const menuToggle = document.getElementById("menuToggle");
   const sidebar = document.getElementById("sidebar");
-
-  if (menuToggle && sidebar) {
-    menuToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("collapsed");
-    });
-  }
+  menuToggle?.addEventListener("click", () => {
+    sidebar?.classList.toggle("collapsed");
+  });
 });
 
 // ---------- TIMER ----------
 function updateTimer() {
   const min = Math.floor(secondsLeft / 60);
   const sec = secondsLeft % 60;
-  timerElement.textContent = `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-  document.title = `${timerElement.textContent} - ${mode === "work" ? "Concentración" : "Descanso"}`;
+  timerElement.textContent =
+    `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  document.title =
+    `${timerElement.textContent} - ${mode === "work" ? "Concentración" : "Descanso"}`;
 }
 
 function updateLaps() {
@@ -74,10 +111,13 @@ function updateLaps() {
 }
 
 function saveState() {
-  localStorage.setItem(
-    "pomodoroState",
-    JSON.stringify({ secondsLeft, isRunning, laps, mode, status: statusElement.textContent })
-  );
+  localStorage.setItem("pomodoroState", JSON.stringify({
+    secondsLeft,
+    isRunning,
+    laps,
+    mode,
+    status: statusElement.textContent
+  }));
 }
 
 let isWaiting = false;
@@ -101,10 +141,10 @@ function switchMode() {
 
   updateTimer();
   saveState();
-
   setTimeout(() => (isWaiting = false), 2000);
 }
 
+// ---------- LOOP ----------
 setInterval(() => {
   if (!isWaiting && isRunning && secondsLeft > 0) {
     secondsLeft--;
@@ -118,7 +158,7 @@ setInterval(() => {
 // ---------- BOTONES ----------
 pauseBtn.addEventListener("click", () => {
   isRunning = !isRunning;
-  pauseBtn.textContent = isRunning ? "Pausa" : "Reanudar";
+  pauseBtn.textContent = isRunning ? "Pausa" : "Iniciar";
   updateHorasHoy();
   saveState();
 });
@@ -127,10 +167,15 @@ resetBtn.addEventListener("click", () => {
   laps = 0;
   mode = "work";
   secondsLeft = workTime;
+  isRunning = false;
+  pauseBtn.textContent = "Iniciar";
   statusElement.textContent = "Concentración";
   updateTimer();
+  updateLaps();
   saveState();
 });
+
+
 
 document.getElementById("resetAllBtn")!.addEventListener("click", () => {
   laps = 0;
@@ -143,25 +188,20 @@ document.getElementById("resetAllBtn")!.addEventListener("click", () => {
 
 skipBtn.addEventListener("click", switchMode);
 
-// ---------- CALCULAR HORAS HOY ----------
+// ---------- HORAS HOY ----------
 function updateHorasHoy() {
-  // Minutos completos por vueltas
   const minutosPorVueltas = laps * (workTime / 60);
 
-  // Minutos parciales del ciclo actual (solo si estás en modo trabajo)
   let minutosParciales = 0;
+  if (mode === "work" && isRunning) {
+  minutosParciales = getMinutosParcialesVisibles();
+}
 
-  if (mode === "work") {
-    const trabajadoEnCicloActual = workTime - secondsLeft;
-    minutosParciales = trabajadoEnCicloActual / 60;
-  }
 
   const totalHoras = (minutosPorVueltas + minutosParciales) / 60;
-
   document.getElementById("horasHoy")!.textContent =
     `Hoy llevas estudiando ${totalHoras.toFixed(2)} horas.`;
 }
-
 
 // ---------- UTIL ----------
 function getHoyISO() {
@@ -169,36 +209,31 @@ function getHoyISO() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-// ---------- OBTENER REGISTRO HOY ----------
+function getMinutosParcialesVisibles() {
+  const texto = timerElement.textContent!;
+  const [min, sec] = texto.split(":").map(Number);
+  const restante = min * 60 + sec;
+  const trabajado = workTime - restante;
+  return trabajado > 0 ? trabajado / 60 : 0;
+}
+
+// ---------- API ----------
 async function obtenerRegistroHoy() {
   const fecha = getHoyISO();
-
   const data = await api.get(`/tiempo/semanal?fecha=${fecha}`);
   return data.find((r: any) => r.fecha === fecha) || null;
 }
 
-// ---------- GUARDAR ----------
 async function guardarEstudio() {
   const fecha = getHoyISO();
 
-  const minutosPorVueltas = laps * (workTime / 60);
-
-  let minutosParciales = 0;
-  if (mode === "work") {
-    minutosParciales = getMinutosParcialesVisibles();
-  }
-
-  const minutos = Math.floor(minutosPorVueltas + minutosParciales);
-
-  console.log("Minutos a guardar:", minutos);
+  const minutos =
+    Math.floor(laps * (workTime / 60) + getMinutosParcialesVisibles());
 
   const hoyRegistro = await obtenerRegistroHoy();
 
   if (!hoyRegistro) {
-    await api.post("/tiempo/crear", {
-      fecha,
-      minutosEstudiados: minutos
-    });
+    await api.post("/tiempo/crear", { fecha, minutosEstudiados: minutos });
     alert("Tiempo guardado ✔");
   } else {
     await api.put(`/tiempo/actualizar/${hoyRegistro.id}`, {
@@ -209,20 +244,11 @@ async function guardarEstudio() {
   }
 }
 
-
-
-document.getElementById("guardarBtn")!.addEventListener("click", guardarEstudio);
+document.getElementById("guardarBtn")!
+  .addEventListener("click", guardarEstudio);
 
 // ---------- LOGOUT ----------
 document.getElementById("logoutBtn")?.addEventListener("click", () => {
-  localStorage.removeItem("usuario");
-  localStorage.removeItem("authToken");
+  localStorage.clear();
   window.location.href = "../../pages/login/login.html";
 });
-function getMinutosParcialesVisibles() {
-  const texto = timerElement.textContent!; // "24:35"
-  const [min, sec] = texto.split(":").map(Number);
-  const restante = min * 60 + sec;
-  const trabajado = workTime - restante;
-  return trabajado > 0 ? trabajado / 60 : 0;
-}
