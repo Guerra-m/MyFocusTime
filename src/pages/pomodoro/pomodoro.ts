@@ -193,15 +193,16 @@ function updateHorasHoy() {
   const minutosPorVueltas = laps * (workTime / 60);
 
   let minutosParciales = 0;
-  if (mode === "work" && isRunning) {
-  minutosParciales = getMinutosParcialesVisibles();
-}
-
+  if (mode === "work") {
+    minutosParciales = getMinutosParcialesVisibles();
+  }
 
   const totalHoras = (minutosPorVueltas + minutosParciales) / 60;
+
   document.getElementById("horasHoy")!.textContent =
     `Hoy llevas estudiando ${totalHoras.toFixed(2)} horas.`;
 }
+
 
 // ---------- UTIL ----------
 function getHoyISO() {
