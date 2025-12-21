@@ -32,7 +32,25 @@
     <h1>MyFocusTrack</h1>
 
     <div class="timer-container">
-      <div id="timer">50:00</div>
+      <div class="circle-timer">
+  <svg width="260" height="260">
+    <circle
+      class="bg"
+      cx="130"
+      cy="130"
+      r="120"
+    />
+    <circle
+      class="progress"
+      cx="130"
+      cy="130"
+      r="120"
+    />
+  </svg>
+
+  <div id="timer" class="time-text">50:00</div>
+</div>
+
       <div id="status">Concentración</div>
 
       <div class="timer-controls">

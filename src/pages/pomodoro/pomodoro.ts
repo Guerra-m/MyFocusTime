@@ -99,11 +99,24 @@ pauseBtn.textContent = "Iniciar";
 function updateTimer() {
   const min = Math.floor(secondsLeft / 60);
   const sec = secondsLeft % 60;
+
   timerElement.textContent =
     `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+
+  const total = mode === "work" ? workTime : breakTime;
+  const progress = secondsLeft / total;
+
+  progressCircle.style.strokeDashoffset =
+    `${CIRCUMFERENCE * (1 - progress)}`;
+
+  // Color según modo
+  progressCircle.style.stroke =
+    mode === "work" ? "#4caf50" : "#2196f3";
+
   document.title =
     `${timerElement.textContent} - ${mode === "work" ? "Concentración" : "Descanso"}`;
 }
+
 
 function updateLaps() {
   lapsElement.textContent = `Llevas ${laps} vueltas`;
@@ -253,3 +266,11 @@ document.getElementById("logoutBtn")?.addEventListener("click", () => {
   localStorage.clear();
   window.location.href = "../../pages/login/login.html";
 });
+const progressCircle = document.querySelector(
+  ".circle-timer .progress"
+) as SVGCircleElement;
+
+const RADIUS = 120;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+progressCircle.style.strokeDasharray = `${CIRCUMFERENCE}`;

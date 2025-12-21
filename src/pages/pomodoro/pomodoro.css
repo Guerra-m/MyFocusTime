@@ -326,3 +326,41 @@ main h1 {
     font-size: 13px;
   }
 }
+.circle-timer {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: 30px auto;
+}
+
+.circle-timer svg {
+  transform: rotate(-90deg);
+}
+
+.circle-timer circle {
+  fill: none;
+  stroke-width: 12;
+}
+
+.circle-timer .bg {
+  stroke: #2e2e2e;
+}
+
+.circle-timer .progress {
+  stroke: #4caf50;
+  stroke-linecap: round;
+  stroke-dasharray: 754;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.5s linear, stroke 0.3s;
+}
+
+.time-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
