@@ -111,7 +111,7 @@ function updateTimer() {
 
   // Color según modo
   progressCircle.style.stroke =
-    mode === "work" ? "#4caf50" : "#2196f3";
+    mode === "work" ? "#d42515ff" : "#67f321ff";
 
   document.title =
     `${timerElement.textContent} - ${mode === "work" ? "Concentración" : "Descanso"}`;
