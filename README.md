@@ -17,7 +17,7 @@ La aplicación te permite gestionar tus sesiones de estudio de forma simple y vi
 - SpringBoot
 - HTML
 - Css
-- JavaScript
+- TypeScript
 - MySQL
 
 ##  Capturas
