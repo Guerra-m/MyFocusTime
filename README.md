@@ -20,7 +20,7 @@ La aplicación te permite gestionar tus sesiones de estudio de forma simple y vi
 - JavaScript
 - MySQL
 
-## 📸 Capturas
+##  Capturas
 
 <p align="center">
   <img src="src/assets/capturas/Pomodoro.png" width="70%">
